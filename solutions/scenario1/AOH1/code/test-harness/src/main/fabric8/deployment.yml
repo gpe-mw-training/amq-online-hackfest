@@ -12,11 +12,11 @@ spec:
               memory: 1Gi
           env:
           - name: AMQP_SERVICE_HOST
-            value: messaging-szrj9fv2tf.amq-online-infra.svc
+            value: messaging-rrzg82dcms.amq-online-infra.svc
           - name: AMQP_SERVICE_PORT
             value: 5672
           - name: AMQP_SERVICE_USERNAME
-            value: admin
+            value: test
           - name: AMQP_SERVICE_PASSWORD
-            value: password
+            value: test
             

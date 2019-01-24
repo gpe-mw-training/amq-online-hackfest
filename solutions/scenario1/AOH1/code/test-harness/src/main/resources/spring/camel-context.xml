@@ -1,31 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+    
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+
+        <route id="send-online-order-reply-route" streamCache="true">
+            <from id="route-from-incoming-orders" uri="amqp:queue:input_online"/>
+            <setHeader headerName="order_type" id="set-online-order-type-header">
+            	<constant>online</constant>
+            </setHeader>
+            <to id="send-to-online-processing-delay" uri="direct:processing-delay"/>
+            <to id="send-to-online-order-reply" uri="direct:send-order-reply"/>
+            <to id="send-to-online-order-alert" uri="direct:send-order-alert"/>
+        </route>
+
+        <route id="send-batch-order-reply-route" streamCache="true">
+            <from id="route-from-incoming-batches" uri="amqp:queue:input_batch"/>
+            <setHeader headerName="order_type" id="set-batch-order-type-header">
+            	<constant>batch</constant>
+            </setHeader>
+            <to id="send-to-batch-processing-delay" uri="direct:processing-delay"/>
+            <to id="send-to-batch-order-reply" uri="direct:send-order-reply"/>
+            <to id="send-to-batch-order-alert" uri="direct:send-order-alert"/>
+        </route>
+
+		<route id="processing-delay-route">
+			<from id="route-from-processing-delay" uri="direct:processing-delay"/>
+			<choice id="order-processing-delay-duration-choice">
+				<when>
+					<simple>${header.order_type} == "online"</simple>
+					<setHeader id="set-online-processing-delay-header" headerName="processing_delay">
+						<constant>10000</constant>
+					</setHeader>
+				</when>
+				<when>
+					<simple>${header.order_type} == "batch"</simple>
+					<setHeader id="set-batch-processing-delay-header" headerName="processing_delay">
+						<constant>60000</constant>
+					</setHeader>
+				</when>
+			</choice>
+			<delay id="order-processing-delay">
+				<header>processing_delay</header>
+			</delay>
+		</route>
+		
+		<route id="send-order-reply-route">
+			<from id="route-from-send-order-reply" uri="direct:send-order-reply"/>
+			<to uri="log:order-reply?showAll=true&amp;multiline=true"/>
+			<!-- toD id="send-to-result-queue" uri="amqp:queue:${header.result_queue}"/ -->
+			<to id="send-to-result-queue" uri="amqp:queue:result_1"/>
+		</route>
+		
+		<route id="send-order-alert-route">
+			<from id="route-from-send-order-alert" uri="direct:send-order-alert"/>
+            <transform id="transform-to-alert-message">
+            	<simple>Sent ${header.order_type} order to ${header.result_queue}</simple>
+            </transform>
+            <to id="send-order-alert" uri="amqp:topic:alerts"/>
+		</route>
+		
         <!-- route id="generate-order-route" streamCache="true">
             <from id="route-timer" uri="timer:order?period=20"/>
             <bean id="route-new-order" method="generateOrder" ref="orderGenerator"/>
             <to id="route-to-incoming-orders" uri="amqp:queue:input_online"/>
         </route -->
-        <route id="send-order-reply-route" streamCache="true">
-            <from id="route-from-incoming-orders" uri="amqp:queue:input_online"/>
-            <setHeader headerName="customerId" id="set-customer-id-header">
-                <xpath>/order/customer/@id</xpath>
-            </setHeader>
-            <setHeader headerName="destination-uri" id="set-destination-uri-header">
-                <simple>amqp:queue:result_${header.customerId}</simple>
-            </setHeader>
-            <delay id="processing-delay">
-                <constant>10000</constant>
-            </delay>
-            <routingSlip id="send-to-destination-uri-routing-slip">
-                <header>destination-uri</header>
-            </routingSlip>
-            <transform id="transform-to-alert-message">
-            	<simple>Processed order from ${header.customerId}</simple>
-            </transform>
-            <to id="send-order-alert" uri="amqp:topic:alerts"/>
-        </route>
         <!-- route id="consume-customer-messages-A0001">
             <from id="route-from-result-A0001" uri="amqp:queue:result_A0001"/>
             <to id="log-A0001" uri="log:A0001"/>

@@ -16,14 +16,14 @@
 package com.redhat.rhc.etp.ei.amqhackfest.test_harness;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.component.amqp.AMQPComponent;
 import org.apache.camel.component.amqp.AMQPConnectionDetails;
+import org.apache.qpid.jms.JmsConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.Scope;
 
 @SpringBootApplication
 @ImportResource({"classpath:spring/camel-context.xml"})
@@ -36,11 +36,17 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    AMQPConnectionDetails createAMQPConnectionDetails() {
-    	AMQPConnectionDetails connDetails = AMQPConnectionDetails.discoverAMQP(camelContext);
+    @Bean(name = "amqp-component")
+    AMQPComponent createAMQPComponent() {
+    	AMQPConnectionDetails amqpConnDetails = AMQPConnectionDetails.discoverAMQP(camelContext);
+
+    	String newUri = amqpConnDetails.uri() + "?amqp.saslMechanisms=PLAIN";
     	
-    	return connDetails;
+    	JmsConnectionFactory qpid = new JmsConnectionFactory(amqpConnDetails.username(), amqpConnDetails.password(), newUri);
+    	
+    	AMQPComponent amqpComponent = new AMQPComponent(qpid);
+    	
+    	return amqpComponent;
     }
+    
 }
