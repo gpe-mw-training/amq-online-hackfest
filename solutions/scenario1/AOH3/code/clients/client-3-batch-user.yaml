@@ -1,0 +1,12 @@
+apiVersion: user.enmasse.io/v1beta1
+kind: MessagingUser
+metadata:
+  name: batch.input.client-3
+spec:
+  username: client-3
+  authentication:
+    type: password
+    password: Y2xpZW50LTMtcGFzc3dvcmQ=
+  authorization:
+    - addresses: ["input"]
+      operations: ["send"]

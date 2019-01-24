@@ -1,0 +1,7 @@
+apiVersion: enmasse.io/v1alpha1
+kind: AddressSpace
+metadata:
+        name: batch
+spec:
+        type: standard
+        plan: batch-plan

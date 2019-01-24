@@ -37,6 +37,6 @@ spec:
           - /kube-state-metrics
           - --port=8080
           - --telemetry-port=8081
-          - --namespace=amq-online-infra
+          - --namespace=team3-amqonline-infra
           - --collectors=pods
       serviceAccountName: kube-state-metrics

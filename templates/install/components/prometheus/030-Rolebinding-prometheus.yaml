@@ -11,4 +11,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: prometheus-server
-  namespace: amq-online-infra
+  namespace: team3-amqonline-infra

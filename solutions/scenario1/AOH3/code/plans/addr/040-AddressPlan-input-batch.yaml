@@ -1,0 +1,17 @@
+apiVersion: admin.enmasse.io/v1beta1
+kind: AddressPlan
+metadata:
+  name: batch-input-queue
+  labels:
+    app: enmasse
+displayName: Batch Input Queue
+displayOrder: 0
+shortDescription: Creates a small queue sharing underlying broker with other queues.
+longDescription: Creates a small queue sharing underlying broker with other queues.
+uuid: 084374ba-d503-11e8-91df-507b9def37d9
+addressType: queue
+requiredResources:
+- name: router
+  credit: 0.1
+- name: broker
+  credit: 1.1
