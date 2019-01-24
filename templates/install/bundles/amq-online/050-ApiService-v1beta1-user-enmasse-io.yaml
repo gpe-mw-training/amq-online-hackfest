@@ -10,6 +10,6 @@ spec:
   insecureSkipTLSVerify: true
   service:
     name: api-server
-    namespace: amq-online-infra
+    namespace: team3-amqonline-infra
   version: v1beta1
   versionPriority: 15

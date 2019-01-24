@@ -22,7 +22,7 @@ data:
           - role: pod
             namespaces:
               names:
-                - amq-online-infra
+                - team3-amqonline-infra
         relabel_configs:
           - action: keep
             source_labels: [__meta_kubernetes_pod_container_port_name]
@@ -35,7 +35,7 @@ data:
           - role: pod
             namespaces:
               names:
-                - amq-online-infra
+                - team3-amqonline-infra
         relabel_configs:
           - action: keep
             source_labels: [__meta_kubernetes_pod_container_port_name]
@@ -48,7 +48,7 @@ data:
           - role: service
             namespaces:
               names:
-                - amq-online-infra
+                - team3-amqonline-infra
         metrics_path: "/metrics"
         relabel_configs:
         - action: keep
@@ -62,7 +62,7 @@ data:
           - role: pod
             namespaces:
               names:
-                - amq-online-infra
+                - team3-amqonline-infra
         relabel_configs:
         - action: keep
           regex: kube-metrics.*

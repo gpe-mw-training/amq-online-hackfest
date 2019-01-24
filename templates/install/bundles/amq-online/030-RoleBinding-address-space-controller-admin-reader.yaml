@@ -11,4 +11,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: address-space-controller
-  namespace: amq-online-infra
+  namespace: team3-amqonline-infra
