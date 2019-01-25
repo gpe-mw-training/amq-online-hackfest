@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: "enmasse.io:apiserver-authentication-reader-team3-amqonline-infra"
+  name: "enmasse.io:apiserver-authentication-reader-amq-online-infra"
   namespace: kube-system
   labels:
     app: enmasse
@@ -12,4 +12,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: api-server
-  namespace: team3-amqonline-infra
+  namespace: amq-online-infra

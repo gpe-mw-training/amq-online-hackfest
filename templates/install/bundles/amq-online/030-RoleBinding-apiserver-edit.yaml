@@ -11,4 +11,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: api-server
-  namespace: team3-amqonline-infra
+  namespace: amq-online-infra
