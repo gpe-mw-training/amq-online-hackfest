@@ -5,12 +5,11 @@ metadata:
   labels:
     app: enmasse
 spec:
-  version: 0.26-SNAPSHOT
   admin:
     resources:
       memory: 512Mi
   broker:
     resources:
-      memory: 1Gi
+      memory: 512Mi
       storage: 5Gi
     addressFullPolicy: FAIL
