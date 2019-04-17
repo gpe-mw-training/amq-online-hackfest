@@ -1,7 +1,0 @@
-apiVersion: enmasse.io/v1alpha1
-kind: AddressSpace
-metadata:
-        name: results
-spec:
-        type: standard
-        plan: online-plan
