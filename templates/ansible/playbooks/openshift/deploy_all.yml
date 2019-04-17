@@ -1,4 +1,0 @@
-- name: "Deploy AMQ Online"
-  hosts: enmasse
-  roles:
-    - cluster_admin

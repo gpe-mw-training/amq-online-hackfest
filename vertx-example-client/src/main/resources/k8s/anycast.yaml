@@ -1,8 +1,0 @@
-apiVersion: enmasse.io/v1beta1
-kind: Address
-metadata:
-  name: vertx-example.myanycast
-spec:
-  address: myanycast
-  type: anycast
-  plan: standard-small-anycast

@@ -11,10 +11,11 @@ The Hackfest is prepared with 2 scenarios that highlight important use cases for
 
 ## Installing AMQ Online
 
-The `templates` folder contains all the YAML files you need to install AMQ Online. Look at the AMQ Online documentation for instructions on how to install AMQ Online:
+For this hackfest, we will be using the latest upstream (EnMasse) version: 0.28.0 . You can get it
+[here](https://github.com/EnMasseProject/enmasse/releases).
 
-* [Installing and Managing AMQ Online on OpenShift Container Platform](https://doc-stage.usersys.redhat.com/documentation/en-us/red_hat_amq/7.2/html-single/installing_and_managing_amq_online_on_openshift_container_platform/)
-* [Using AMQ Online on OpenShift Container Platform](https://doc-stage.usersys.redhat.com/documentation/en-us/red_hat_amq/7.2/html-single/using_amq_online_on_openshift_container_platform/)
+Have a look at the [documentation](https://enmasse.io/documentation/0.28.0/openshift) for installing
+and using.
 
 ### Installing plans
 
@@ -23,28 +24,21 @@ scenarios. These can be found in the `plans` folder. Once AMQ Online is
 installed, they can be applied by running:
 
 ```
-oc apply -f plans
-```
-
-Run the following commands to verify that they are installed:
-
-```
-oc get standardinfraconfigs
-oc get brokeredinfraconfigs
-oc get addressspaceplans
-oc get addressplans
+oc apply -f plans -n enmasse-infra
 ```
 
 ## Example clients
 
-Provided are examples you can use as base for your client code to access AMQ Online. Any
-client supporting the standard protocols used by AMQ Online (AMQP, MQTT etc), so these clients should
-only be considered an example of the different ways you can retrieve endpoint information and access
-the endpoints automatically.
+Some example clients in Java can be found [here](https://github.com/EnMasseProject/enmasse-example-clients).
 
-There are currently 2 Java-based clients:
+Any client supporting the standard protocols used by AMQ Online (AMQP, MQTT etc), so these clients should
+only be considered an example of the different ways you can connect to the address spaces you have
+created.
+
+There are currently 3 Java-based clients:
 
 * vertx-example-client - Vert.X based client configured using a properties file, shows how to access EnMasse externally
+* quarkus-example-client - Vert.X based client running on-cluster, compiled using quarkus
 * jms-example-client - JMS-based configured to read AddressSpace info and use service account for authentication.
 
 Both examples come with resources that you deploy to provision messaging.
@@ -54,9 +48,9 @@ Both examples come with resources that you deploy to provision messaging.
 ```
 oc delete rolebindings -l app=enmasse -n kube-system
 oc delete clusterrolebindings -l app=enmasse
-oc delete crd -l app=enmasse
+oc delete crds -l app=enmasse
 oc delete clusterroles -l app=enmasse
 oc delete apiservices -l app=enmasse
 oc delete oauthclients -l app=enmasse
-oc delete project amq-online-infra
+oc delete project enmasse-infra
 ```
